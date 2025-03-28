@@ -1,0 +1,42 @@
+export const mockJobs = [
+  {
+    job_id: "1",
+    employer_name: "Tech Corp",
+    job_title: "React Native Developer",
+    job_employment_type: "Full-time",
+    job_country: "USA",
+    employer_logo: "https://logo.clearbit.com/techcorp.com",
+  },
+  {
+    job_id: "2",
+    employer_name: "Web Solutions",
+    job_title: "Frontend Engineer",
+    job_employment_type: "Contract",
+    job_country: "Canada",
+    employer_logo: "https://logo.clearbit.com/websolutions.com",
+  },
+  {
+    job_id: "3",
+    employer_name: "Mobile Dev Inc",
+    job_title: "React Developer",
+    job_employment_type: "Part-time",
+    job_country: "UK",
+    employer_logo: "https://logo.clearbit.com/mobiledevinc.com",
+  },
+  {
+    job_id: "4",
+    employer_name: "Software House",
+    job_title: "JavaScript Engineer",
+    job_employment_type: "Full-time",
+    job_country: "Germany",
+    employer_logo: "https://logo.clearbit.com/softwarehouse.com",
+  },
+  {
+    job_id: "5",
+    employer_name: "Digital Creations",
+    job_title: "UI Developer",
+    job_employment_type: "Contract",
+    job_country: "Australia",
+    employer_logo: "https://logo.clearbit.com/digitalcreations.com",
+  },
+];
