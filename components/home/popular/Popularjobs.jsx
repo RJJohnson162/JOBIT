@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import {
   View,
@@ -18,14 +18,19 @@ const Popularjobs = () => {
   const [showAll, setShowAll] = useState(false);
 
   const { data, isLoading, error, refetch } = useFetch("search", {
-    query: "React developer",
+    query: "Software Developer",
     num_pages: "1",
     page: "1",
+    country: "US",
+    employment_types: "FULLTIME",
   });
 
-  const displayedJobs = showAll ? data : (data || []).slice(0, 5);
-  const hasPagination = (data?.length || 0) > 5;
-  const isRateLimited = error?.response?.status === 429;
+  const filteredJobs = (data || []).filter(
+    (job) => job.job_title && /software|developer|engineer/i.test(job.job_title)
+  );
+
+  const displayedJobs = showAll ? filteredJobs : filteredJobs.slice(0, 5);
+  const canShowMore = filteredJobs.length > 5;
 
   const handleCardPress = (item) => {
     router.push(`/job-details/${item.job_id}`);
@@ -35,69 +40,59 @@ const Popularjobs = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Popular jobs</Text>
-        <View style={styles.headerRight}>
-          {hasPagination && !isRateLimited && (
-            <TouchableOpacity onPress={() => setShowAll((prev) => !prev)}>
-              <Text style={styles.headerBtn}>
-                {showAll ? "Show Less" : "Show All"}
-              </Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity
-            onPress={refetch}
-            style={styles.refreshButton}
-            disabled={isLoading || isRateLimited}
-          >
-            <Text
-              style={[
-                styles.headerBtn,
-                (isLoading || isRateLimited) && styles.disabledBtn,
-              ]}
-            >
-              {isLoading ? "Refreshing..." : "Refresh"}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.headerTitle}>Popular US Jobs</Text>
+        <TouchableOpacity onPress={refetch} disabled={isLoading}>
+          <Text style={[styles.headerBtn, isLoading && styles.disabledBtn]}>
+            {isLoading ? "Refreshing..." : "Refresh"}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.cardsContainer}>
-        {isLoading ? (
+        {isLoading && !data?.length ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
-        ) : isRateLimited ? (
-          <View style={styles.rateLimitContainer}>
-            <Text style={styles.rateLimitText}>
-              API limit reached. Please wait a minute before retrying.
-            </Text>
-          </View>
         ) : error ? (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>
-              {error.message.includes("Network Error")
-                ? "Network error. Check your connection."
+              {error.message.includes("Invalid API")
+                ? "Server returned unexpected data"
                 : error.message}
             </Text>
             <TouchableOpacity onPress={refetch} style={styles.retryButton}>
-              <Text style={styles.retryText}>Retry</Text>
+              <Text style={styles.retryText}>Try Again</Text>
             </TouchableOpacity>
           </View>
-        ) : !data?.length ? (
-          <Text style={styles.noJobsText}>No jobs found</Text>
+        ) : filteredJobs.length === 0 ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>No matching jobs found</Text>
+            <Text style={styles.subText}>Try different search criteria</Text>
+          </View>
         ) : (
-          <FlatList
-            data={displayedJobs}
-            renderItem={({ item }) => (
-              <PopularJobCard
-                item={item}
-                selectedJob={selectedJob}
-                handleCardPress={handleCardPress}
-              />
+          <>
+            <FlatList
+              data={displayedJobs}
+              renderItem={({ item }) => (
+                <PopularJobCard
+                  item={item}
+                  selectedJob={selectedJob}
+                  handleCardPress={handleCardPress}
+                />
+              )}
+              keyExtractor={(item) => item.job_id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+            {canShowMore && (
+              <TouchableOpacity
+                onPress={() => setShowAll(!showAll)}
+                style={styles.showMoreBtn}
+              >
+                <Text style={styles.headerBtn}>
+                  {showAll ? "Show Less" : `Show All (${filteredJobs.length})`}
+                </Text>
+              </TouchableOpacity>
             )}
-            keyExtractor={(item) => `popular-job-${item.job_id}`}
-            contentContainerStyle={{ columnGap: SIZES.medium }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
+          </>
         )}
       </View>
     </View>

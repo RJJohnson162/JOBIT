@@ -64,6 +64,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: SIZES.medium,
   },
+  showAllButton: {
+    padding: SIZES.small,
+    backgroundColor: COLORS.primary,
+    borderRadius: SIZES.small,
+    alignItems: "center",
+    marginTop: SIZES.medium,
+  },
+  showAllText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
+  },
 });
 
 export default styles;

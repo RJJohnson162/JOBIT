@@ -62,6 +62,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: SIZES.medium,
   },
+  regionContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: SIZES.xSmall,
+    marginTop: SIZES.small,
+  },
+  regionButton: {
+    paddingHorizontal: SIZES.medium,
+    paddingVertical: SIZES.xSmall,
+    borderRadius: SIZES.small,
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+  },
+  activeRegionButton: {
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.primary,
+  },
+  regionButtonText: {
+    fontSize: SIZES.small,
+    color: COLORS.gray,
+  },
 });
 
 export default styles;

@@ -6,23 +6,27 @@ import { icons } from "../../../constants";
 import { checkImageURL } from "../../../utils";
 
 const Company = ({ companyLogo, jobTitle, companyName, location }) => {
+  const FALLBACK_IMAGE =
+    "https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg";
+
   return (
     <View style={styles.container}>
       <View style={styles.logoBox}>
         <Image
           source={{
-            uri: checkImageURL(companyLogo)
-              ? companyLogo
-              : "https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg",
+            uri:
+              companyLogo && checkImageURL(companyLogo)
+                ? companyLogo
+                : FALLBACK_IMAGE,
           }}
           style={styles.logoImage}
         />
       </View>
 
+      {/* Rest of the component remains the same */}
       <View style={styles.jobTitleBox}>
         <Text style={styles.jobTitle}>{jobTitle}</Text>
       </View>
-
       <View style={styles.companyInfoBox}>
         <Text style={styles.companyName}>{companyName} / </Text>
         <View style={styles.locationBox}>
